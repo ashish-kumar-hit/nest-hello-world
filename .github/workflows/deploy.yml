@@ -1,0 +1,29 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js 16
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install dependencies
+        run: npm install
+      - name: Build the application
+        run: npm run build
+      - name: Deploy to EC2
+        uses: aws-actions/aws-ssh@v3
+        with:
+          aws-region: us-east-1
+          instance-id: i-0a9854bdad1f0b45f
+          username: hello-world-ak
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            cd nest-hello-world
+            npm run start
