@@ -2,25 +2,29 @@ name: Deploy
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]  # Corrected indentation
 
 jobs:
   Deploy:
     name: Deploy to EC2
     runs-on: ubuntu-latest
-    
+
     steps:
-      - uses: actions/checkout@v2 
+      - uses: actions/checkout@v2
+
       - name: Build & Deploy
         env:
-            PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-            HOSTNAME: ${{secrets.SSH_HOST}}
-            USER_NAME: ${{secrets.USER_NAME}}
-      
+          PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          HOSTNAME: ${{ secrets.SSH_HOST }}
+          USER_NAME: ${{ secrets.USER_NAME }}
+
         run: |
-        echo "ssh -i "${{ secrets.SSH_PRIVATE_KEY }}" ${{secrets.USER_NAME}}@${{secrets.SSH_HOST}}
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} ${{secrets.USER_NAME}}@${{secrets.SSH_HOST}} 
-          '
+          # Echo the constructed SSH command (for informational purposes only)
+          echo "Constructed SSH command:"
+          echo "ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.USER_NAME }}@${{ secrets.HOSTNAME }} '..."
+
+          # Execute the actual SSH command
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.USER_NAME }}@${{ secrets.HOSTNAME }} '
               cd /home/ubuntu/nest-hello-world &&
               sudo npm run start
           '
