@@ -20,6 +20,6 @@ jobs:
           username: ${{ secrets.USER_NAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/helloworld-nestjs-ec2/
+            cd ~/nest-hello-world/
             git pull origin main
             npm run start
